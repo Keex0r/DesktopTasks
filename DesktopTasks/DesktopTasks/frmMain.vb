@@ -31,7 +31,7 @@ Public Class frmMain
     Private Sub UpdateWallpaper()
         Dim sSize As Size = Screen.PrimaryScreen.Bounds.Size
         Using bmp As New Bitmap(sSize.Width, sSize.Height)
-            Dim f As New Font("Lucida Bright", 40)
+            Dim f As New Font("Lucida Bright", 32)
             Using g As Graphics = Graphics.FromImage(bmp)
                 g.Clear(Color.Black)
                 'Draw update time
@@ -40,11 +40,12 @@ Public Class frmMain
                 Dim sUp = g.MeasureString(update, fUp)
                 g.DrawString(update, fUp, Brushes.White, CInt(1920 - sUp.Width - 5), 1)
 
-                Dim thistasks = (From t In Tasks Where t.Date > Date.Now Select t Order By t.Date).ToList
+                Dim thistasks = (From t In Tasks Where t.Date > Date.Now And t.IsIndescriminate = False Select t Order By t.Date).ToList
+                Dim intasks = (From t In Tasks Where t.IsIndescriminate = True Select t Order By t.Date).ToList
                 Dim sizes As New List(Of SizeF)
                 Dim texts As New List(Of String)
 
-                If thistasks.Count > 0 Then
+                If thistasks.Count + intasks.Count > 0 Then
                     'Create text entries
                     For Each t In thistasks
                         Dim remaining = (t.Date - Date.Now)
@@ -62,8 +63,19 @@ Public Class frmMain
                         texts.Add(text)
                         sizes.Add(g.MeasureString(text, f))
                     Next
-                Else
-                    texts.Add("All tasks done! :-)")
+                    If intasks.Count > 0 Then
+                        texts.Add("-----------------")
+                        sizes.Add(g.MeasureString("-----------------", f))
+                    End If
+                    For Each t In intasks
+
+                            Dim text = t.Description
+                            texts.Add(text)
+                            sizes.Add(g.MeasureString(text, f))
+                        Next
+
+                    Else
+                        texts.Add("All tasks done! :-)")
                     sizes.Add(g.MeasureString("All tasks done! :-)", f))
                 End If
 
@@ -94,6 +106,7 @@ Public Class frmMain
         Dim otherdate = DateTimePicker2.Value
         t.Date = New Date(t.Date.Year, t.Date.Month, t.Date.Day, otherdate.Hour, otherdate.Minute, otherdate.Second)
         t.Description = tbTask.Text
+        t.IsIndescriminate = CheckBox1.Checked
         Tasks.Add(t)
         Save()
         tbTask.Text = ""
@@ -160,6 +173,11 @@ Public Class frmMain
             bmp.Save(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TaskBG.png"), System.Drawing.Imaging.ImageFormat.Png)
             SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TaskBG.png"), SPIF_UPDATEINIFILE Or SPIF_SENDCHANGE)
         End Using
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        DateTimePicker1.Enabled = Not CheckBox1.Checked
+        DateTimePicker2.Enabled = Not CheckBox1.Checked
     End Sub
 #End Region
 

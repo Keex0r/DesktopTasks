@@ -33,6 +33,7 @@ Partial Class frmMain
         Me.DateTimePicker2 = New System.Windows.Forms.DateTimePicker()
         Me.numDelay = New System.Windows.Forms.NumericUpDown()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numDelay, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -80,6 +81,7 @@ Partial Class frmMain
         Me.DataGridView1.Location = New System.Drawing.Point(206, 12)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
+        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridView1.Size = New System.Drawing.Size(563, 238)
         Me.DataGridView1.TabIndex = 3
         '
@@ -109,11 +111,22 @@ Partial Class frmMain
         Me.Label1.TabIndex = 6
         Me.Label1.Text = "Update delay (s):"
         '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(12, 90)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(94, 17)
+        Me.CheckBox1.TabIndex = 7
+        Me.CheckBox1.Text = "Indescriminate"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(781, 262)
+        Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.numDelay)
         Me.Controls.Add(Me.DateTimePicker2)
@@ -141,4 +154,5 @@ Partial Class frmMain
     Friend WithEvents DateTimePicker2 As DateTimePicker
     Friend WithEvents numDelay As NumericUpDown
     Friend WithEvents Label1 As Label
+    Friend WithEvents CheckBox1 As CheckBox
 End Class
