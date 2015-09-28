@@ -101,12 +101,10 @@ Public Class frmMain
 #Region "Add task"
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
         If String.IsNullOrEmpty(tbTask.Text) Then Exit Sub
-        Dim t As New DeskTask
-        t.Date = DateTimePicker1.Value
+        Dim d As Date = DateTimePicker1.Value
         Dim otherdate = DateTimePicker2.Value
-        t.Date = New Date(t.Date.Year, t.Date.Month, t.Date.Day, otherdate.Hour, otherdate.Minute, otherdate.Second)
-        t.Description = tbTask.Text
-        t.IsIndescriminate = CheckBox1.Checked
+        Dim realD As New Date(d.Year, d.Month, d.Day, otherdate.Hour, otherdate.Minute, otherdate.Second)
+        Dim t As New DeskTask(realD, tbTask.Text, CheckBox1.Checked)
         Tasks.Add(t)
         Save()
         tbTask.Text = ""
@@ -144,6 +142,7 @@ Public Class frmMain
 #Region "Other events"
     Private Sub DataGridView1_UserDeletedRow(sender As Object, e As DataGridViewRowEventArgs) Handles DataGridView1.UserDeletedRow
         Save()
+        UpdateWallpaper()
     End Sub
 
     Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseDoubleClick
@@ -178,6 +177,11 @@ Public Class frmMain
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
         DateTimePicker1.Enabled = Not CheckBox1.Checked
         DateTimePicker2.Enabled = Not CheckBox1.Checked
+    End Sub
+
+    Private Sub DataGridView1_CellValidated(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValidated
+        Save()
+        UpdateWallpaper()
     End Sub
 #End Region
 
