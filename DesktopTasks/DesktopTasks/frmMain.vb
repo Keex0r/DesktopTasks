@@ -63,7 +63,7 @@ Public Class frmMain
                         texts.Add(text)
                         sizes.Add(g.MeasureString(text, f))
                     Next
-                    If intasks.Count > 0 Then
+                    If intasks.Count > 0 AndAlso thistasks.Count > 0 Then
                         texts.Add("-----------------")
                         sizes.Add(g.MeasureString("-----------------", f))
                     End If
