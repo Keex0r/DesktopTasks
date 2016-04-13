@@ -34,12 +34,16 @@ Partial Class frmMain
         Me.numDelay = New System.Windows.Forms.NumericUpDown()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.cmsTray = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ExitDesktopTasksToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numDelay, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.cmsTray.SuspendLayout()
         Me.SuspendLayout()
         '
         'NotifyIcon1
         '
+        Me.NotifyIcon1.ContextMenuStrip = Me.cmsTray
         Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"), System.Drawing.Icon)
         Me.NotifyIcon1.Text = "Desktop Tasks"
         Me.NotifyIcon1.Visible = True
@@ -120,6 +124,18 @@ Partial Class frmMain
         Me.CheckBox1.Text = "Indescriminate"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
+        'cmsTray
+        '
+        Me.cmsTray.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExitDesktopTasksToolStripMenuItem})
+        Me.cmsTray.Name = "cmsTray"
+        Me.cmsTray.Size = New System.Drawing.Size(167, 26)
+        '
+        'ExitDesktopTasksToolStripMenuItem
+        '
+        Me.ExitDesktopTasksToolStripMenuItem.Name = "ExitDesktopTasksToolStripMenuItem"
+        Me.ExitDesktopTasksToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
+        Me.ExitDesktopTasksToolStripMenuItem.Text = "Exit DesktopTasks"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -137,6 +153,7 @@ Partial Class frmMain
         Me.Text = "Notification settings"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numDelay, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.cmsTray.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -154,4 +171,6 @@ Partial Class frmMain
     Friend WithEvents numDelay As NumericUpDown
     Friend WithEvents Label1 As Label
     Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents cmsTray As ContextMenuStrip
+    Friend WithEvents ExitDesktopTasksToolStripMenuItem As ToolStripMenuItem
 End Class

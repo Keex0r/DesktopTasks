@@ -146,6 +146,7 @@ Public Class frmMain
     End Sub
 
     Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseDoubleClick
+        Me.Show()
         Me.WindowState = FormWindowState.Normal
     End Sub
 
@@ -160,18 +161,23 @@ Public Class frmMain
     Private Sub numDelay_ValueChanged(sender As Object, e As EventArgs) Handles numDelay.ValueChanged
         Timer1.Interval = Math.Min(Math.Max(1, CInt(numDelay.Value)), 3600) * 1000
     End Sub
-
+    Private DoClose As Boolean = False
     Private Sub frmMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        'Blank screen when program shuts down
-        Dim sSize As Size = Screen.PrimaryScreen.Bounds.Size
-        Using bmp As New Bitmap(sSize.Width, sSize.Height)
-            Dim f As New Font("Lucida Bright", 40)
-            Using g As Graphics = Graphics.FromImage(bmp)
-                g.Clear(Color.Black)
+        If DoClose Or e.CloseReason <> CloseReason.UserClosing Then
+            'Blank screen when program shuts down
+            Dim sSize As Size = Screen.PrimaryScreen.Bounds.Size
+            Using bmp As New Bitmap(sSize.Width, sSize.Height)
+                Dim f As New Font("Lucida Bright", 40)
+                Using g As Graphics = Graphics.FromImage(bmp)
+                    g.Clear(Color.Black)
+                End Using
+                bmp.Save(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TaskBG.png"), System.Drawing.Imaging.ImageFormat.Png)
+                SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TaskBG.png"), SPIF_UPDATEINIFILE Or SPIF_SENDCHANGE)
             End Using
-            bmp.Save(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TaskBG.png"), System.Drawing.Imaging.ImageFormat.Png)
-            SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TaskBG.png"), SPIF_UPDATEINIFILE Or SPIF_SENDCHANGE)
-        End Using
+        Else
+            Me.Hide()
+            e.Cancel = True
+        End If
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -182,6 +188,11 @@ Public Class frmMain
     Private Sub DataGridView1_CellValidated(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValidated
         Save()
         UpdateWallpaper()
+    End Sub
+
+    Private Sub ExitDesktopTasksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitDesktopTasksToolStripMenuItem.Click
+        DoClose = True
+        Me.Close()
     End Sub
 #End Region
 
